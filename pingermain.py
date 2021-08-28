@@ -8,13 +8,20 @@ from processors.multithread import MultiThreadPingProcessor
 def read_hosts() -> List[str]:
     with open('data.json') as file_handle:
         json_data = json.load(file_handle)
-        return json_data["hosts"]
+        try:
+            hosts = json_data["hosts"]
+        except KeyError as err:
+            raise Exception("The list of `hosts' could not be parsed from data.json")
+        return hosts
 
 
 def do_ping_job(args: argparse.Namespace):
     start_time = time.time()
     processor = MultiThreadPingProcessor(args.pool)
-    ping_results = processor.do_ping_job(read_hosts(), args.iterations)
+    hosts = read_hosts()
+    if len(hosts) < 1:
+        raise Exception("data.json did not contain any hosts to ping.")
+    ping_results = processor.do_ping_job(hosts, args.iterations)
     max_ping = 0
     max_host = ""
     for result in ping_results:
