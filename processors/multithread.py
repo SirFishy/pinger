@@ -9,7 +9,7 @@ from processor import PingProcessor
 class MultiThreadPingProcessor(PingProcessor):
     pools: int
 
-    def __init__(self, pools: int, ):
+    def __init__(self, pools: int):
         self.pools = pools
 
     def do_ping_job(self, hosts: List[str], iterations: float) -> List[PingResult]:
