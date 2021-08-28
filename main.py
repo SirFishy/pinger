@@ -1,27 +1,19 @@
 import time
-
-from pingers.windows import WindowsPinger
+import json
 import concurrent.futures
+from typing import List
+from pingers.windows import WindowsPinger
 
 
-def time_ping_google(iterations: int) -> float:
-    google_pinger = WindowsPinger()
-    return google_pinger.timed_ping("www.google.com", iterations)
+def read_hosts() -> List[str]:
+    with open('data.json') as file_handle:
+        json_data = json.load(file_handle)
+        return json_data["hosts"]
 
 
-def time_ping_yahoo(iterations: int) -> float:
-    yahoo_pinger = WindowsPinger()
-    return yahoo_pinger.timed_ping("www.yahoo.com", iterations)
-
-
-def time_ping_stackoverflow(iterations: int) -> float:
-    stackoverflow_pinger = WindowsPinger()
-    return stackoverflow_pinger.timed_ping("www.stackoverflow.com", iterations)
-
-
-def time_ping_twitch(iterations: int) -> float:
-    twitch_pinger = WindowsPinger()
-    return twitch_pinger.timed_ping("www.twitch.com", iterations)
+def time_ping_host(host: str, iterations: int) -> float:
+    host_pinger = WindowsPinger()
+    return host_pinger.timed_ping(host, iterations)
 
 
 if __name__ == '__main__':
@@ -30,10 +22,8 @@ if __name__ == '__main__':
     future_results = list()
     start_time = time.time()
     with concurrent.futures.ThreadPoolExecutor(pool_size) as executor:
-        future_results.append(executor.submit(time_ping_google, iterations))
-        future_results.append(executor.submit(time_ping_yahoo, iterations))
-        future_results.append(executor.submit(time_ping_stackoverflow, iterations))
-        future_results.append(executor.submit(time_ping_twitch, iterations))
+        for host in read_hosts():
+            future_results.append(executor.submit(time_ping_host, host, iterations))
     max_ping = 0
     for result in future_results:
         max_ping = max(max_ping, result.result())
