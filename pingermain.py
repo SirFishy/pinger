@@ -30,9 +30,20 @@ def do_ping_job(args: argparse.Namespace):
     print(f"Program took {time.time() - start_time} seconds to run")
 
 
+def check_positive(value):
+    try:
+        int_value = int(value)
+    except ValueError:
+        raise argparse.ArgumentError(f"{value} should be an integer")
+
+    if int_value <= 0:
+        raise argparse.ArgumentTypeError(f"Invalid input: {value}, should be greater than 0")
+    return int_value
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Ping some websites.')
-    parser.add_argument('--pool', type=int, help='Number of pools for executor', default=5)
-    parser.add_argument('--iterations', type=int, help='Number of times to ping each website', default=5)
+    parser.add_argument('--pool', type=check_positive, help='Number of pools for executor', default=5)
+    parser.add_argument('--iterations', type=check_positive, help='Number of times to ping each website', default=5)
     do_ping_job(parser.parse_args())
 
