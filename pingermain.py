@@ -4,6 +4,7 @@ import time
 import concurrent.futures
 from typing import List
 from pingers.windows import WindowsPinger
+from pingresult import PingResult
 
 
 def read_hosts() -> List[str]:
@@ -12,7 +13,7 @@ def read_hosts() -> List[str]:
         return json_data["hosts"]
 
 
-def time_ping_host(host: str, iterations: int) -> float:
+def time_ping_host(host: str, iterations: int) -> PingResult:
     host_pinger = WindowsPinger()
     return host_pinger.timed_ping(host, iterations)
 
@@ -24,9 +25,14 @@ def do_ping_job(args: argparse.Namespace):
         for host in read_hosts():
             future_results.append(executor.submit(time_ping_host, host, args.iterations))
     max_ping = 0
+    max_host = "None"
     for result in future_results:
-        max_ping = max(max_ping, result.result())
-    print(f"Longest job took {max_ping} seconds to run")
+        prev_ping = max_ping
+        ping_result = result.result()
+        max_ping = max(max_ping, ping_result.total_ping_time)
+        if prev_ping != max_ping:
+            max_host = ping_result.host
+    print(f"Longest job took {max_ping} seconds to ping {max_host}")
     print(f"Program took {time.time() - start_time} seconds to run")
 
 
