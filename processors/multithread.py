@@ -1,4 +1,4 @@
-import concurrent
+import concurrent.futures
 from typing import List
 
 from pingers.windows import WindowsPinger

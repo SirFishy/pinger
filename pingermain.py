@@ -2,8 +2,6 @@ import argparse
 import json
 import time
 from typing import List
-from pingers.windows import WindowsPinger
-from pingresult import PingResult
 from processors.multithread import MultiThreadPingProcessor
 
 
@@ -11,11 +9,6 @@ def read_hosts() -> List[str]:
     with open('data.json') as file_handle:
         json_data = json.load(file_handle)
         return json_data["hosts"]
-
-
-def time_ping_host(host: str, iterations: int) -> PingResult:
-    host_pinger = WindowsPinger()
-    return host_pinger.timed_ping(host, iterations)
 
 
 def do_ping_job(args: argparse.Namespace):
