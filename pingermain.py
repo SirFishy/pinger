@@ -1,10 +1,10 @@
 import argparse
 import json
 import time
-import concurrent.futures
 from typing import List
 from pingers.windows import WindowsPinger
 from pingresult import PingResult
+from processors.multithread import MultiThreadPingProcessor
 
 
 def read_hosts() -> List[str]:
@@ -19,19 +19,16 @@ def time_ping_host(host: str, iterations: int) -> PingResult:
 
 
 def do_ping_job(args: argparse.Namespace):
-    future_results = list()
     start_time = time.time()
-    with concurrent.futures.ThreadPoolExecutor(args.pool) as executor:
-        for host in read_hosts():
-            future_results.append(executor.submit(time_ping_host, host, args.iterations))
+    processor = MultiThreadPingProcessor(args.pool)
+    ping_results = processor.do_ping_job(read_hosts(), args.iterations)
     max_ping = 0
-    max_host = "None"
-    for result in future_results:
+    max_host = ""
+    for result in ping_results:
         prev_ping = max_ping
-        ping_result = result.result()
-        max_ping = max(max_ping, ping_result.total_ping_time)
+        max_ping = max(max_ping, result.total_ping_time)
         if prev_ping != max_ping:
-            max_host = ping_result.host
+            max_host = result.host
     print(f"Longest job took {max_ping} seconds to ping {max_host}")
     print(f"Program took {time.time() - start_time} seconds to run")
 
