@@ -1,3 +1,4 @@
+import logging
 import subprocess
 
 from pinger import Pinger
@@ -6,6 +7,7 @@ from pinger import Pinger
 class WindowsPinger(Pinger):
 
     def ping(self, host: str, iterations: int):
+        logging.info(f"Pinging {host} {iterations} times.")
         ping_process = subprocess.Popen(["ping", "-n", f"{iterations}", host], stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE, text=True)
         pipe_data = ping_process.communicate()
