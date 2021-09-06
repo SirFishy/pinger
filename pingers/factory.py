@@ -16,7 +16,7 @@ class PingerFactory:
             pinger = WindowsPinger()
         elif sys.platform.startswith('cygwin'):
             raise NotImplementedError(self._get_exception_message('cygwin'))
-        logging.debug(f"Creating {pinger.__class__.__name__} for {sys.platform}")
+        logging.debug(f"Creating {pinger.__class__.__name__} for {sys.platform} platform")
         return pinger
 
     @staticmethod
