@@ -1,7 +1,7 @@
 import concurrent.futures
 from typing import List
 
-from pingers.unix import UnixPinger
+from pingers.factory import PingerFactory
 from pingresult import PingResult
 from processor import PingProcessor
 
@@ -16,7 +16,7 @@ class MultiThreadPingProcessor(PingProcessor):
         future_results = list()
         with concurrent.futures.ThreadPoolExecutor(self.pools) as executor:
             for host in hosts:
-                pinger = UnixPinger()
+                pinger = PingerFactory().get_system_pinger()
                 future_results.append(executor.submit(pinger.timed_ping, host, iterations))
         ping_results = list()
         for result in future_results:
