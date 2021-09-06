@@ -9,9 +9,9 @@ from processors.multithread import MultiThreadPingProcessor
 def read_hosts() -> List[str]:
     with open('data.json') as file_handle:
         json_data = json.load(file_handle)
-        logging.debug(f"Parsed {json_data}")
         try:
             hosts = json_data["hosts"]
+            logging.debug(f"Parsed {hosts}")
         except KeyError as err:
             logging.error("The list of 'hosts' could not be parsed from data.json")
             raise Exception(err)
@@ -51,7 +51,7 @@ def check_positive(value):
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(relativeCreated)6d %(threadName)s - %(levelname)s - %(message)s',
-                        level=logging.INFO)
+                        level=logging.DEBUG)
     parser = argparse.ArgumentParser(description='Ping some websites.')
     parser.add_argument('--pool', type=check_positive, help='Number of pools for executor', default=5)
     parser.add_argument('--iterations', type=check_positive, help='Number of times to ping each website', default=5)
