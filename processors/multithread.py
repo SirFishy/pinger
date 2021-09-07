@@ -17,7 +17,7 @@ class MultiThreadPingProcessor(PingProcessor):
         with concurrent.futures.ThreadPoolExecutor(self.pools) as executor:
             for host in hosts:
                 pinger = PingerFactory().get_system_pinger()
-                future_results.append(executor.submit(pinger.timed_ping, host, iterations))
+                future_results.append(executor.submit(pinger.ping, host, iterations))
         ping_results = list()
         for result in future_results:
             ping_results.append(result.result())
