@@ -26,5 +26,5 @@ Default `iterations` set to 5
 
 ## Data
 
-Websites that are pinged by `pinger` are stored in `data.json`
+`pinger` will ping websites in the `hosts` array in `data.json`
 
