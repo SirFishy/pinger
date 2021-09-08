@@ -33,7 +33,7 @@ class Pinger(ABC):
             if stdout:
                 logging.info(stdout)
             if stderr:
-                logging.info(stderr)
+                logging.error(stderr)
             return stdout, stderr
         return wrapper
 
