@@ -25,8 +25,8 @@ optional arguments:
 
 ### Defaults
 Default `pool` set to 5 <br>
-Default `iterations` set to 5
-Default `processor` set to `thread`
+Default `iterations` set to 5 <br>
+Default `processor` set to `thread` <br>
 
 ## Data
 
