@@ -1,4 +1,5 @@
-import concurrent.futures
+import logging
+import multiprocessing
 from multiprocessing import Pool
 from typing import List
 
@@ -12,6 +13,10 @@ class MultiProcessPingProcessor(PingProcessor):
 
     def __init__(self, processes: int):
         self.processes = processes
+        if processes > multiprocessing.cpu_count():
+            logging.warning(f'Input pool size {processes} is greater than cpu count {multiprocessing.cpu_count()}.'
+                            f' Using cpu count instead.')
+            self.processes = multiprocessing.cpu_count()
 
     def do_ping_job(self, hosts: List[str], iterations: float) -> List[PingResult]:
         with Pool(self.processes) as pool:

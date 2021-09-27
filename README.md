@@ -15,7 +15,7 @@ Ping some websites.
 
 optional arguments:
 -h, --help            show this help message and exit
-  --parallel PARALLEL   Number of jobs to run in parallel
+  --pool POOL           Number of jobs to run in parallel
   --iterations ITERATIONS
                         Number of times to ping each website
   --processor {process,thread}
