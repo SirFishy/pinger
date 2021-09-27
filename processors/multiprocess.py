@@ -23,6 +23,7 @@ class MultiProcessPingProcessor(PingProcessor):
         pool.join()
         return results
 
-    def _job_function(self, host: str, iterations: float) -> PingResult:
+    @staticmethod
+    def _job_function(host: str, iterations: float) -> PingResult:
         pinger = PingerFactory().get_system_pinger()
         return pinger.ping(host, int(iterations))
