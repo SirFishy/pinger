@@ -63,8 +63,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Ping some websites.')
     parser.add_argument('--parallel', type=check_positive, help='Number of jobs to run in parallel', default=5)
     parser.add_argument('--iterations', type=check_positive, help='Number of times to ping each website', default=5)
-    parser.add_argument('--processor', type=check_processor, help='Parallel processor implementation.',
-                        default='thread')
+    parser.add_argument('--processor', type=check_processor, choices=[item.value for item in ProcessorType],
+                        help='Parallel processor implementation.', default='thread')
     parsed_args = parser.parse_args()
     logging.info(f"Number of parallel jobs: {parsed_args.parallel}")
     logging.info(f"Number of ping iterations: {parsed_args.iterations}")
